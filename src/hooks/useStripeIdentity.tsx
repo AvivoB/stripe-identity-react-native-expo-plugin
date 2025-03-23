@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { presentIdentityVerificationSheet } from '../functions';
+import { useState, useCallback } from 'react';
+import { presentIdentityVerificationSheet } from '../StripeIdentitySdk';
 import type {
   IdentityVerificationSheetOptions,
   IdentityVerificationSheetStatus,
@@ -30,24 +30,34 @@ import type {
  * const { present, status, loading, error } = useStripeIdentity(fetchOptionsProvider)
  * ```
  */
-export function useStripeIdentity(
-  optionsProvider: () => Promise<IdentityVerificationSheetOptions>
-) {
+
+type FetchVerificationOptionsCallback = () => Promise<IdentityVerificationSheetOptions>;
+
+export function useStripeIdentity(fetchOptionsCallback: FetchVerificationOptionsCallback) {
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState<
-    IdentityVerificationSheetStatus | undefined
-  >();
-  const [error, setError] = useState<StripeError | undefined>();
+  const [status, setStatus] = useState<IdentityVerificationSheetStatus>();
+  const [error, setError] = useState<StripeError>();
 
-  const present = async () => {
+  const present = useCallback(async () => {
     setLoading(true);
-    const options = await optionsProvider();
-    setLoading(false);
-    const { status: identityStatus, error: identityError } =
-      await presentIdentityVerificationSheet(options);
-    setStatus(identityStatus);
-    setError(identityError);
-  };
+    try {
+      const options = await fetchOptionsCallback();
+      const result = await presentIdentityVerificationSheet(options);
+      setStatus(result.status);
+      if (result.error) {
+        setError(result.error);
+      }
+    } catch (e) {
+      setError(e as StripeError);
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchOptionsCallback]);
 
-  return { present, status, loading, error };
+  return {
+    present,
+    loading,
+    status,
+    error,
+  };
 }

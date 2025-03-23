@@ -1,15 +1,19 @@
-import type { ImageResolvedAssetSource } from 'react-native';
-
 export type IdentityVerificationSheetOptions = {
-  sessionId: string;
-  ephemeralKeySecret: string;
-  brandLogo: ImageResolvedAssetSource;
+  verificationSessionId: string;
+  ephemeralKeySecret?: string;
+  brandLogo?: {
+    uri?: string;
+    width?: number;
+    height?: number;
+    scale?: number;
+  };
 };
 
 export type IdentityVerificationSheetStatus =
   | 'FlowCompleted'
   | 'FlowCanceled'
-  | 'FlowFailed';
+  | 'FlowFailed'
+  | 'Undefined';
 
 export type IdentityVerificationSheetResult = {
   status: IdentityVerificationSheetStatus;
@@ -33,7 +37,7 @@ export type ErrorType =
   | 'rate_limit_error';
 
 export type StripeError = {
-  code: IdentityVerificationSheetStatus;
+  code: string;
   message: string;
   localizedMessage?: string;
   declineCode?: string;

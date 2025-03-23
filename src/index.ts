@@ -1,14 +1,14 @@
-// hooks
+// Hooks
 export { useStripeIdentity } from './hooks/useStripeIdentity';
 
-// functions
-export { presentIdentityVerificationSheet } from './functions';
+// Functions
+export { presentIdentityVerificationSheet } from './StripeIdentitySdk';
 
-// types
+// Types
 export type {
   IdentityVerificationSheetOptions,
   IdentityVerificationSheetResult,
   IdentityVerificationSheetStatus,
-  StripeError,
   ErrorType,
+  StripeError,
 } from './types';

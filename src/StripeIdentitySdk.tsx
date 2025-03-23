@@ -1,16 +1,15 @@
 import { NativeModules, Platform } from 'react-native';
 import type {
-  InitIdentityVerificationSheet,
-  PresentIdentityVerificationSheet,
+  IdentityVerificationSheetOptions,
+  IdentityVerificationSheetResult,
 } from './types';
 
 const LINKING_ERROR =
-  `The package 'stripe-identity-react-native' doesn't seem to be linked. Make sure: \n\n` +
+  `The package 'stripe-identity-react-native-expo-plugin' doesn't seem to be linked. Make sure: \n\n` +
   Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
-  '- You rebuilt the app after installing the package\n' +
-  '- You are not using Expo managed workflow\n';
+  '- You rebuilt the app after installing the package\n';
 
-const StripeIdentityReactNative = NativeModules.StripeIdentityReactNative
+const StripeIdentityModule = NativeModules.StripeIdentityReactNative
   ? NativeModules.StripeIdentityReactNative
   : new Proxy(
       {},
@@ -21,9 +20,13 @@ const StripeIdentityReactNative = NativeModules.StripeIdentityReactNative
       }
     );
 
-type StripeIdentitySdkType = {
-  initIdentityVerificationSheet: InitIdentityVerificationSheet;
-  presentIdentityVerificationSheet: PresentIdentityVerificationSheet;
-};
-
-export default StripeIdentityReactNative as StripeIdentitySdkType;
+export async function presentIdentityVerificationSheet(
+  options: IdentityVerificationSheetOptions
+): Promise<IdentityVerificationSheetResult> {
+  try {
+    const result = await StripeIdentityModule.presentIdentityVerificationSheet(options);
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}

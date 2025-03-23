@@ -192,3 +192,55 @@ import type {
 ## Contributing
 
 See the [contributor guidelines](CONTRIBUTING.md) to learn how to contribute to the repository.
+
+# Stripe Identity React Native Expo Plugin
+
+A plugin to use Stripe Identity verification in your Expo app.
+
+## Installation
+
+```sh
+npx expo install stripe-identity-react-native-expo-plugin
+```
+
+## Configuration
+
+Add the plugin to your Expo config (app.json, app.config.js, or app.config.ts):
+
+```json
+{
+  "expo": {
+    "plugins": ["stripe-identity-react-native-expo-plugin"]
+  }
+}
+```
+
+### Usage
+
+```tsx
+import { presentIdentityVerificationSheet } from 'stripe-identity-react-native-expo-plugin';
+
+// In your component:
+const verifyIdentity = async () => {
+  try {
+    const result = await presentIdentityVerificationSheet({
+      verificationSessionId: 'vs_...'
+    });
+    console.log(result);
+  } catch (error) {
+    console.error(error);
+  }
+};
+```
+
+## Requirements
+
+- Expo SDK 49 or higher
+- iOS 13.0 or higher
+- Android API level 21 or higher
+
+## Features
+
+- Automatic permission handling for camera access
+- Material theme configuration for Android
+- TypeScript support
