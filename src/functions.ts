@@ -1,4 +1,4 @@
-import StripeIdentityReactNative from './StripeIdentitySdk';
+import { NativeModules } from 'react-native';
 import type {
   IdentityVerificationSheetOptions,
   IdentityVerificationSheetResult,
@@ -7,6 +7,6 @@ import type {
 export async function presentIdentityVerificationSheet(
   options: IdentityVerificationSheetOptions
 ): Promise<IdentityVerificationSheetResult> {
-  await StripeIdentityReactNative.initIdentityVerificationSheet(options);
-  return await StripeIdentityReactNative.presentIdentityVerificationSheet();
+  await NativeModules.StripeIdentityReactNative.initIdentityVerificationSheet(options);
+  return await NativeModules.StripeIdentityReactNative.PresentIdentityVerificationSheet();
 }
